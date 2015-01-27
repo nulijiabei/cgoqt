@@ -15,4 +15,6 @@ import "C"
 
 func main() {
 
+	C.start()
+
 }
