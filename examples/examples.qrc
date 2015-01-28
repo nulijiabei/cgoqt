@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>help.png</file>
+        <file>exit.png</file>
+        <file>save.png</file>
+        <file>up.png</file>
+        <file>down.png</file>
+        <file>conn.png</file>
+        <file>disc.png</file>
+        <file>clear.png</file>
+    </qresource>
+</RCC>

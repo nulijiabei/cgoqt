@@ -21,8 +21,8 @@ func NewConn() *Conn {
 }
 
 func (this *Conn) Connect(_device string) error {
-	url := fmt.Sprintf("ws://127.0.0.1:8080/api/command?device=%s", _device)
-	origin := "http://127.0.0.1:8080"
+	url := fmt.Sprintf("ws://evolver.danoolive.com:6868/api/command?device=%s", _device)
+	origin := "http://evolver.danoolive.com:6868"
 	ws, err := websocket.Dial(url, "", origin)
 	if err != nil {
 		return err
@@ -75,14 +75,6 @@ func (this *Conn) Read() {
 
 	}
 
-}
-
-func (this *Conn) Takeback() error {
-	command := make(map[string]interface{})
-	command["protocol"] = "pull"
-	data, _ := json.MarshalIndent(command, "", "  ")
-	log.Printf("Connect(Server) Command -> \n%s\n", data)
-	return this.WriteJsonToConn(command)
 }
 
 func (this *Conn) Write(_command string) error {

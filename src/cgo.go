@@ -34,14 +34,6 @@ func cgo_command(_content unsafe.Pointer, _size C.int) C.int {
 	return 1
 }
 
-//export cgo_takeback
-func cgo_takeback() C.int {
-	if err := conn.Takeback(); err != nil {
-		return 0
-	}
-	return 1
-}
-
 func cgo_callback(_content string) {
 	C.cgo_callback(unsafe.Pointer(C.CString(_content)))
 }
