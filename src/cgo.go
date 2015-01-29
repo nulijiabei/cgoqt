@@ -7,7 +7,7 @@ package main
 */
 // #include <stdio.h>
 // #include <stdlib.h>
-// #cgo LDFLAGS: -L./ -lexamples -framework QtGui
+// #cgo LDFLAGS: -L./ -lexamples
 import "C"
 import "unsafe"
 import z "github.com/nutzam/zgo"
