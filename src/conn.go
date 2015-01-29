@@ -28,12 +28,12 @@ func (this *Conn) Connect(_device string) error {
 		return err
 	} else {
 		this.Ws = ws
-		go this.Read()
+		go this.ReadConn()
 	}
 	return nil
 }
 
-func (this *Conn) Read() {
+func (this *Conn) ReadConn() {
 
 	r := bufio.NewReader(this.Ws)
 	for {
@@ -65,38 +65,56 @@ func (this *Conn) Read() {
 			continue
 		}
 
+		// 设备返回信息
 		if ok && !z.IsBlank(rd) {
 			cgo_callback(rd)
 		}
 
-		if !ok && z.IsBlank(rd) {
-			cgo_callback(rd)
+		// 服务器返回信息
+		if !ok && !z.IsBlank(rd) {
+			StaticData.setData(rd)
 		}
 
 	}
 
 }
 
-func (this *Conn) Write(_command string) error {
+func (this *Conn) WriteConn(_command string) {
 	command := make(map[string]interface{})
 	command["protocol"] = "execute"
 	command["command"] = _command
 	data, _ := json.MarshalIndent(command, "", "  ")
 	log.Printf("Connect(Server) Command -> \n%s\n", data)
-	return this.WriteJsonToConn(command)
+	this.WriteJsonToConn(command)
 }
 
-func (this *Conn) WriteJsonToConn(data interface{}) error {
+func (this *Conn) CheckConn() bool {
+	if this.Ws == nil {
+		return false
+	}
+	return true
+}
+
+func (this *Conn) DisConn() {
+	if this.CheckConn() {
+		this.Ws.Close()
+		this.Ws = nil
+	}
+}
+
+func (this *Conn) WriteJsonToConn(data interface{}) {
+	if !this.CheckConn() {
+		StaticData.setData("Please check disconnect.")
+		return
+	}
 	content, err := json.Marshal(data)
 	if err != nil {
-		return err
-	}
-	if this.Ws == nil {
-		return fmt.Errorf("...")
+		StaticData.setData(err.Error())
+		return
 	}
 	_, err = io.WriteString(this.Ws, string(content)+"\n")
 	if err != nil {
-		return err
+		StaticData.setData(err.Error())
+		return
 	}
-	return nil
 }

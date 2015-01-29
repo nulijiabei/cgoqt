@@ -19,11 +19,14 @@ public:
     QTimer * timer;
 
 public:
+
     void sendDisplay(const char *);
 
 private slots:
 
     void sendCommand();
+
+    void sendMessage();
 
     void on_quit_triggered();
 
@@ -32,6 +35,8 @@ private slots:
     void on_connect_triggered();
 
     void on_help_triggered();
+
+    void on_disconn_triggered();
 
 private:
     Ui::Examples *ui;

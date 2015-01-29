@@ -62,6 +62,8 @@
    <addaction name="connect"/>
    <addaction name="disconn"/>
    <addaction name="separator"/>
+   <addaction name="member"/>
+   <addaction name="separator"/>
    <addaction name="upload"/>
    <addaction name="download"/>
    <addaction name="separator"/>
@@ -87,6 +89,8 @@
     </property>
     <addaction name="connect"/>
     <addaction name="disconn"/>
+    <addaction name="separator"/>
+    <addaction name="member"/>
     <addaction name="separator"/>
     <addaction name="save"/>
     <addaction name="separator"/>
@@ -233,6 +237,15 @@
   <action name="openvpn">
    <property name="text">
     <string>专用网络(&amp;V)</string>
+   </property>
+  </action>
+  <action name="member">
+   <property name="icon">
+    <iconset resource="examples.qrc">
+     <normaloff>:/mm.png</normaloff>:/mm.png</iconset>
+   </property>
+   <property name="text">
+    <string>跳跃(&amp;T)</string>
    </property>
   </action>
  </widget>
