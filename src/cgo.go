@@ -10,6 +10,7 @@ package main
 // #cgo LDFLAGS: -L./ -lexamples -framework QtGui
 import "C"
 import "unsafe"
+import z "github.com/nutzam/zgo"
 
 var StaticConn *Conn
 
@@ -51,7 +52,20 @@ func cgo_disconn() {
 //export cgo_command
 func cgo_command(_content unsafe.Pointer, _size C.int) {
 	command := string(C.GoBytes(_content, _size))
-	StaticConn.WriteConn(command)
+	StaticConn.WriteConn(z.Trim(command))
+}
+
+//export cgo_shortcuts
+func cgo_shortcuts(_content unsafe.Pointer, _size C.int) {
+	var command string
+	content := string(C.GoBytes(_content, _size))
+	switch z.Trim(content) {
+	case "network":
+		command = "ifconfig -a"
+	}
+	if !z.IsBlank(command) {
+		StaticConn.WriteConn(z.Trim(command))
+	}
 }
 
 //export cgo_message
