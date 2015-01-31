@@ -33,8 +33,11 @@
      </property>
      <item alignment="Qt::AlignHCenter">
       <widget class="QLabel" name="label">
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
        <property name="text">
-        <string>请键入需要连接的设备地址. (例如:3C07540A7AD8)</string>
+        <string>请键入需要连接的设备地址:</string>
        </property>
       </widget>
      </item>
@@ -45,6 +48,15 @@
          <width>0</width>
          <height>40</height>
         </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>00E0B40BE2BF</string>
        </property>
       </widget>
      </item>

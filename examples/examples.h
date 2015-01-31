@@ -38,6 +38,8 @@ private slots:
 
     void on_disconn_triggered();
 
+    void on_network_triggered();
+
 private:
     Ui::Examples *ui;
 };

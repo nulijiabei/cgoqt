@@ -1,7 +1,7 @@
 #include "examples.h"
 #include "ui_examples.h"
 #include "connect.h"
-#include "cgo.h"
+#include "cgo_examples.h"
 
 Examples::Examples(QWidget *parent) :
     QMainWindow(parent),
@@ -90,12 +90,12 @@ void Examples::on_connect_triggered()
 
 void Examples::on_help_triggered()
 {
-    QMessageBox::information(this, tr("帮助"), tr("德纳科技 (2015-01-28)"), QMessageBox::Yes);
+    QMessageBox::information(this, tr("帮助"), tr("德纳科技 (2015-01-31)"), QMessageBox::Yes);
 }
 
 void Examples::on_disconn_triggered()
 {
-    int n = cgo_checkconn();
+    int n = cgo_checkconn_2();
     if (n == 1)
     {
         QMessageBox::StandardButton rb = QMessageBox::information(this, tr("断开"), tr("是要断开与服务器的连接吗?"), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
@@ -109,4 +109,17 @@ void Examples::on_disconn_triggered()
         QMessageBox::information(this, tr("断开"), tr("未连接服务器!"), QMessageBox::Yes);
     }
 
+}
+
+void Examples::on_network_triggered()
+{
+    int n = cgo_checkconn_2();
+    if (n != 1)
+    {
+        QMessageBox::information(this, tr("提示"), tr("未连接服务器!"), QMessageBox::Yes);
+        return;
+    }
+    QString command;
+    command.append("network");
+    cgo_shortcuts(command.toLatin1().data(), command.toLatin1().length());
 }

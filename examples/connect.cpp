@@ -1,6 +1,6 @@
 #include "connect.h"
 #include "ui_connect.h"
-#include "cgo.h"
+#include "cgo_connect.h"
 
 Connect::Connect(QWidget *parent) :
     QDialog(parent),

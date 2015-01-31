@@ -14,14 +14,15 @@ TARGET = examples
 TEMPLATE = lib
 
 SOURCES +=\
-    cgo.cpp \
     examples.cpp \
-    connect.cpp
+    connect.cpp \
+    cgo_main.cpp
 
 HEADERS  += \
     examples.h \
     connect.h \
-    cgo.h
+    cgo_connect.h \
+    cgo_examples.h
 
 FORMS    += \
     examples.ui \
