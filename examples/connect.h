@@ -1,7 +1,8 @@
 #ifndef CONNECT_H
 #define CONNECT_H
 
-#include <QtGui>
+#include <QDialog>
+#include <QMessageBox>
 
 namespace Ui {
 class Connect;

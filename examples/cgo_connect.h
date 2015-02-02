@@ -1,9 +1,6 @@
 #ifndef CGO_CONNECT_H
 #define CGO_CONNECT_H
 
-#include <QtGui>
-
-
 typedef int (*COMMAND_CGO_CONNECT_FUNCTION)(void *, int);
 
 typedef int (*COMMAND_CGO_CHECKCONN_FUNCTION)();

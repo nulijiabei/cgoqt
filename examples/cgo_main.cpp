@@ -1,4 +1,5 @@
 #include "examples.h"
+#include <QApplication>
 
 using namespace std;
 

@@ -1,7 +1,11 @@
 #ifndef EXAMPLES_H
 #define EXAMPLES_H
 
-#include <QtGui>
+#include <QDialog>
+#include <QMainWindow>
+#include <QMessageBox>
+#include <QTimer>
+#include <QTextCodec>
 
 namespace Ui {
 class Examples;
