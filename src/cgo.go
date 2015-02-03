@@ -3,30 +3,31 @@ package main
 /*
 	extern void cgo_init();
 	extern int cgo_start();
-	extern void cgo_callback(void *);
-	extern void drv_cgo_callback(int, void*);
-	extern void drv_cgo_callback_2(int, void*);
-	static void init_callback()
-	{
-		int _cgo_connect = 1;
-		int _cgo_checkconn = 2;
-		int _cgo_disconn = 3;
-		int _cgo_command = 4;
-		int _cgo_shortcuts = 5;
-		int _cgo_message = 6;
-		extern int cgo_connect(void *, int);
+	extern void cgo_callback(void*);
+	extern void drv_cgo_callback(void*, void*);
+	static void callback()
+	{   char * _cgo_connect = "cgo_connect";
+		char * _cgo_checkconn = "cgo_checkconn";
+		char * _cgo_disconn = "cgo_disconn";
+		char * _cgo_command = "cgo_command";
+		char * _cgo_shortcuts = "cgo_shortcuts";
+		char * _cgo_message = "cgo_message";
+		char * _cgo_goline = "cgo_goline";
+		extern int cgo_connect(void*, int);
 		extern int cgo_checkconn();
 		extern void cgo_disconn();
-		extern void cgo_command(void *, int);
-		extern void cgo_shortcuts(void *, int);
-		extern void * cgo_message();
-		drv_cgo_callback_2(_cgo_connect, &cgo_connect);
-		drv_cgo_callback_2(_cgo_checkconn, &cgo_checkconn);
+		extern void cgo_command(void*, int);
+		extern void cgo_shortcuts(void*, int);
+		extern void* cgo_message();
+		extern void cgo_goline(void*, int);
+		drv_cgo_callback(_cgo_connect, &cgo_connect);
 		drv_cgo_callback(_cgo_checkconn, &cgo_checkconn);
 		drv_cgo_callback(_cgo_disconn, &cgo_disconn);
 		drv_cgo_callback(_cgo_command, &cgo_command);
 		drv_cgo_callback(_cgo_shortcuts, &cgo_shortcuts);
 		drv_cgo_callback(_cgo_message, &cgo_message);
+		drv_cgo_callback(_cgo_goline, &cgo_goline);
+
 	}
 */
 // #include <stdio.h>
@@ -34,20 +35,26 @@ package main
 // #cgo LDFLAGS: -L./ -lexamples
 import "C"
 import "unsafe"
-import z "github.com/nutzam/zgo"
-import "log"
+import (
+	z "github.com/nutzam/zgo"
+	"log"
+	"runtime"
+	"strings"
+)
 
 var StaticConn *Conn
 
 var StaticData *Data
 
 func start() {
-	C.init_callback()
 	C.cgo_init()
+	C.callback()
 	C.cgo_start()
 }
 
 func main() {
+	runtime.GOMAXPROCS(runtime.NumCPU())
+	log.SetFlags(log.Lshortfile | log.Ldate | log.Ltime | log.Lmicroseconds)
 	StaticConn = NewConn()
 	StaticData = NewData()
 	start()
@@ -57,7 +64,7 @@ func main() {
 func cgo_connect(_content unsafe.Pointer, _size C.int) C.int {
 	device := string(C.GoBytes(_content, _size))
 	log.Println("Go->", device)
-	if err := StaticConn.Connect(device); err != nil {
+	if err := StaticConn.Connect(device, "1.0.1"); err != nil {
 		return C.int(0)
 	}
 	return C.int(1)
@@ -66,9 +73,9 @@ func cgo_connect(_content unsafe.Pointer, _size C.int) C.int {
 //export cgo_checkconn
 func cgo_checkconn() C.int {
 	if StaticConn.CheckConn() {
-		return 1
+		return C.int(1)
 	}
-	return 0
+	return C.int(0)
 }
 
 //export cgo_disconn
@@ -79,7 +86,7 @@ func cgo_disconn() {
 //export cgo_command
 func cgo_command(_content unsafe.Pointer, _size C.int) {
 	command := string(C.GoBytes(_content, _size))
-	StaticConn.WriteConn(z.Trim(command))
+	StaticConn.SendCommandByConn(z.Trim(command))
 }
 
 //export cgo_shortcuts
@@ -91,7 +98,7 @@ func cgo_shortcuts(_content unsafe.Pointer, _size C.int) {
 		command = "ifconfig -a"
 	}
 	if !z.IsBlank(command) {
-		StaticConn.WriteConn(z.Trim(command))
+		StaticConn.SendCommandByConn(z.Trim(command))
 	}
 }
 
@@ -99,9 +106,25 @@ func cgo_shortcuts(_content unsafe.Pointer, _size C.int) {
 func cgo_message() unsafe.Pointer {
 	data := StaticData.getData()
 	StaticData.delData()
-	return unsafe.Pointer(C.CString(data))
+	// 在哪里创建，就在哪里释放
+	content := C.CString(data)
+	defer C.free(unsafe.Pointer(content))
+	return unsafe.Pointer(content)
 }
 
-func cgo_callback(_content string) {
-	C.cgo_callback(unsafe.Pointer(C.CString(_content)))
+//export cgo_goline
+func cgo_goline(_content unsafe.Pointer, _size C.int) {
+	content := string(C.GoBytes(_content, _size))
+	data := strings.Split(z.Trim(content), " ")
+	log.Println("Goline ->", data)
+	if len(data) == 4 {
+		StaticConn.SendGolineByConn(z.Trim(data[0]), z.Trim(data[1]), z.Trim(data[2]), z.Trim(data[3]))
+	}
+}
+
+func cgo_display(_content string) {
+	// 在哪里创建，就在哪里释放
+	content := C.CString(_content)
+	defer C.free(unsafe.Pointer(content))
+	C.cgo_callback(unsafe.Pointer(content))
 }
