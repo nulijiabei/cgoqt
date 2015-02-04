@@ -81,6 +81,7 @@ func (this *Conn) ReadConn() {
 
 func (this *Conn) SendCommandByConn(_command string) {
 	command := make(map[string]interface{})
+	command["id"] = z.UnixNano()
 	command["type"] = "command"
 	command["command"] = _command
 	data, _ := json.MarshalIndent(command, "", "  ")
@@ -90,6 +91,7 @@ func (this *Conn) SendCommandByConn(_command string) {
 
 func (this *Conn) SendGolineByConn(_ipaddr, _username, _password, _color string) {
 	command := make(map[string]interface{})
+	command["id"] = z.UnixNano()
 	command["type"] = "goline"
 	command["ipaddr"] = _ipaddr
 	command["username"] = _username
