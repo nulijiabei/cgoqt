@@ -3,6 +3,8 @@
 #include "connect.h"
 #include "goline.h"
 #include "cgo.h"
+#include <QFileDialog>
+#include <QTextStream>
 
 Examples::Examples(QWidget *parent) :
     QMainWindow(parent),
@@ -91,7 +93,7 @@ void Examples::on_connect_triggered()
 
 void Examples::on_help_triggered()
 {
-    QMessageBox::information(this, tr("帮助"), tr("德纳科技 (2015-01-31)"), QMessageBox::Yes);
+    QMessageBox::information(this, tr("帮助"), tr("德纳科技"), QMessageBox::Yes);
 }
 
 void Examples::on_disconn_triggered()
@@ -99,10 +101,10 @@ void Examples::on_disconn_triggered()
     int n = cgo->cgo_checkconn();
     if (n != 1)
     {
-        QMessageBox::information(this, tr("断开"), tr("未连接服务器!"), QMessageBox::Yes);
+        QMessageBox::information(this, tr("断开"), tr("未连接服务器,请先连接."), QMessageBox::Yes);
         return;
     }
-    QMessageBox::StandardButton rb = QMessageBox::information(this, tr("断开"), tr("是要断开与服务器的连接吗?"), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    QMessageBox::StandardButton rb = QMessageBox::information(this, tr("断开"), tr("您确定要断开当前连接吗?"), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
     if(rb == QMessageBox::Yes)
     {
         cgo->cgo_disconn();
@@ -114,7 +116,7 @@ void Examples::on_network_triggered()
     int n = cgo->cgo_checkconn();
     if (n != 1)
     {
-        QMessageBox::information(this, tr("提示"), tr("未连接服务器!"), QMessageBox::Yes);
+        QMessageBox::information(this, tr("提示"), tr("未连接服务器,请先连接."), QMessageBox::Yes);
         return;
     }
     QString command;
@@ -132,4 +134,27 @@ void Examples::on_member_triggered()
 int Examples::setCgo(Cgo *_a)
 {
     cgo = _a;
+    return 0;
+}
+
+void Examples::on_save_triggered()
+{
+    QString path = QFileDialog::getSaveFileName(this, tr("保存"), "./history.txt", tr("Text files (*.txt)"));
+    if (!path.isEmpty())
+    {
+        QFile *file = new QFile;
+        file->setFileName(path);
+        bool ok = file->open(QIODevice::WriteOnly);
+        if (ok) {
+            QTextStream out(file);
+            out << ui->display->toPlainText();
+            file->close();
+            QMessageBox::information(this, tr("提示"), tr("保存文件成功."), QMessageBox::Yes);
+        }
+        else
+        {
+            QMessageBox::information(this, tr("提示"), tr("保存文件失败."), QMessageBox::Yes);
+        }
+        delete file;
+    }
 }

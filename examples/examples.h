@@ -52,6 +52,8 @@ private slots:
 
     void on_member_triggered();
 
+    void on_save_triggered();
+
 private:
     Ui::Examples *ui;
 };

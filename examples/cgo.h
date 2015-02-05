@@ -6,7 +6,7 @@
 
 using namespace std;
 
-typedef int (*COMMAND_CGO_CONNECT_FUNCTION)(void*, int);
+typedef int (*COMMAND_CGO_CONNECT_FUNCTION)(void*, int, void*, int);
 typedef int (*COMMAND_CGO_CHECKCONN_FUNCTION)();
 typedef void (*COMMAND_CGO_DISCONN_FUNCTION)();
 typedef void (*COMMAND_CGO_COMMAND_FUNCTION)(void*, int);

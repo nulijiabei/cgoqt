@@ -20,8 +20,8 @@ func NewConn() *Conn {
 	return conn
 }
 
-func (this *Conn) Connect(_device, _version string) error {
-	url := fmt.Sprintf("ws://evolver.danoolive.com:6868/api/command?device=%s&version=%s", _device, _version)
+func (this *Conn) Connect(_device, _version, _authorize string) error {
+	url := fmt.Sprintf("ws://evolver.danoolive.com:6868/api/command?device=%s&version=%s&authorize=%s", _device, _version, _authorize)
 	origin := "http://evolver.danoolive.com:6868"
 	ws, err := websocket.Dial(url, "", origin)
 	if err != nil {

@@ -18,6 +18,7 @@ Goline::~Goline()
 int Goline::setCgo(Cgo *_a)
 {
     cgo = _a;
+    return 0;
 }
 
 void Goline::on_pushButton_clicked()
@@ -34,7 +35,7 @@ void Goline::on_pushButton_2_clicked()
     int c = cgo->cgo_checkconn();
     if (c != 1)
     {
-        QMessageBox::information(this, tr("提示"), tr("未连接服务器!"), QMessageBox::Yes);
+        QMessageBox::information(this, tr("提示"), tr("未连接服务器,请先连接."), QMessageBox::Yes);
         return;
     }
     QString goline;

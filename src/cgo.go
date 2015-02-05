@@ -13,7 +13,7 @@ package main
 		char * _cgo_shortcuts = "cgo_shortcuts";
 		char * _cgo_message = "cgo_message";
 		char * _cgo_goline = "cgo_goline";
-		extern int cgo_connect(void*, int);
+		extern int cgo_connect(void*, int, void*, int);
 		extern int cgo_checkconn();
 		extern void cgo_disconn();
 		extern void cgo_command(void*, int);
@@ -61,10 +61,10 @@ func main() {
 }
 
 //export cgo_connect
-func cgo_connect(_content unsafe.Pointer, _size C.int) C.int {
+func cgo_connect(_content unsafe.Pointer, _size C.int, _content_2 unsafe.Pointer, _size_2 C.int) C.int {
 	device := string(C.GoBytes(_content, _size))
-	log.Println("Go->", device)
-	if err := StaticConn.Connect(device, "1.02"); err != nil {
+	authorize := string(C.GoBytes(_content_2, _size_2))
+	if err := StaticConn.Connect(device, "1.02", authorize); err != nil {
 		return C.int(0)
 	}
 	return C.int(1)
@@ -108,6 +108,7 @@ func cgo_message() unsafe.Pointer {
 	StaticData.delData()
 	// 在哪里创建，就在哪里释放
 	content := C.CString(data)
+	// For Windows QT Free
 	defer C.free(unsafe.Pointer(content))
 	return unsafe.Pointer(content)
 }
@@ -116,7 +117,6 @@ func cgo_message() unsafe.Pointer {
 func cgo_goline(_content unsafe.Pointer, _size C.int) {
 	content := string(C.GoBytes(_content, _size))
 	data := strings.Split(z.Trim(content), " ")
-	log.Println("Goline ->", data)
 	if len(data) == 4 {
 		StaticConn.SendGolineByConn(z.Trim(data[0]), z.Trim(data[1]), z.Trim(data[2]), z.Trim(data[3]))
 	}
@@ -125,6 +125,7 @@ func cgo_goline(_content unsafe.Pointer, _size C.int) {
 func cgo_display(_content string) {
 	// 在哪里创建，就在哪里释放
 	content := C.CString(_content)
+	// For Windows QT Free
 	defer C.free(unsafe.Pointer(content))
 	C.cgo_callback(unsafe.Pointer(content))
 }

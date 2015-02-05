@@ -18,6 +18,7 @@ Connect::~Connect()
 int Connect::setCgo(Cgo *_a)
 {
     cgo = _a;
+    return 0;
 }
 
 void Connect::on_pushButton_clicked()
@@ -34,18 +35,19 @@ void Connect::on_pushButton_2_clicked()
     int c = cgo->cgo_checkconn();
     if (c == 1)
     {
-        QMessageBox::information(this, tr("连接"), tr("请先断开当前与服务器连接!"), QMessageBox::Yes);
+        QMessageBox::information(this, tr("连接"), tr("如需连接其它设备,请先断开当前连接."), QMessageBox::Yes);
         return;
     }
-    int n = cgo->cgo_connect((void*)ui->lineEdit->text().toLatin1().data(), ui->lineEdit->text().toLatin1().length());
+    int n = cgo->cgo_connect((void*)ui->lineEdit->text().toLatin1().data(), ui->lineEdit->text().toLatin1().length(),
+                             (void*)ui->lineEdit_2->text().toLatin1().data(), ui->lineEdit_2->text().length());
     if (n == 1)
     {
         this->hide();
-        QMessageBox::information(this, tr("连接"), tr("连接服务器成功!"), QMessageBox::Yes);
+        QMessageBox::information(this, tr("连接"), tr("连接服务器成功."), QMessageBox::Yes);
         this->close();
     }
     else
     {
-        QMessageBox::information(this, tr("连接"), tr("连接服务器失败!"), QMessageBox::Yes);
+        QMessageBox::information(this, tr("连接"), tr("连接服务器失败."), QMessageBox::Yes);
     }
 }
