@@ -5,6 +5,7 @@
 #include "cgo.h"
 #include <QFileDialog>
 #include <QTextStream>
+#include <QDebug>
 
 Examples::Examples(QWidget *parent) :
     QMainWindow(parent),
@@ -30,6 +31,13 @@ Examples::Examples(QWidget *parent) :
     timer = new QTimer();
     connect(timer,SIGNAL(timeout()), this, SLOT(sendMessage()));
     timer->start(100);
+    // ...
+    history = new QStringList();
+    model = new QStandardItemModel(0, 1, this);
+    completer = new QCompleter(model, this);
+    ui->command->setCompleter(completer);
+    connect(completer, SIGNAL(activated(const QString&)), this, SLOT(onCommandChoosed(const QString&)));
+    connect(ui->command, SIGNAL(textChanged(const QString&)), this, SLOT(onCommandChanged(const QString&)));
 }
 
 Examples::~Examples()
@@ -53,6 +61,9 @@ void Examples::sendCommand()
     {
         return;
     }
+    // ...
+    appendHistory(ui->command->text());
+    // ...
     QString command;
     command.append("<pre>");
     command.append("# ");
@@ -62,6 +73,18 @@ void Examples::sendCommand()
     cgo->cgo_command((void*)ui->command->text().toLatin1().data(), ui->command->text().toLatin1().length());
     ui->display->moveCursor(QTextCursor::End);
     ui->command->clear();
+}
+
+void Examples::appendHistory(const QString &_str)
+{
+    for (int i = 0; i < history->size(); ++i)
+    {
+        if (history->at(i).compare(_str.trimmed()) == 0)
+        {
+            return;
+        }
+    }
+    history->append(_str.trimmed());
 }
 
 void Examples::sendDisplay(const char * _content)
@@ -156,5 +179,29 @@ void Examples::on_save_triggered()
             QMessageBox::information(this, tr("提示"), tr("保存文件失败."), QMessageBox::Yes);
         }
         delete file;
+    }
+}
+
+void Examples::onCommandChoosed(const QString& _command)
+{
+    // 清除已存在的文本更新内容
+    ui->command->clear();
+    ui->command->setText(_command);
+}
+
+void Examples::onCommandChanged(const QString& _str)
+{
+    // 清楚已经存在的数据
+    model->removeRows(0, model->rowCount());
+
+    // 遍历所有的命令
+    for (int i = 0; i < history->size(); ++i)
+    {
+        // 插入包含关键字的数据
+        if (history->at(i).startsWith(_str))
+        {
+            model->insertRow(0);
+            model->setData(model->index(0, 0), history->at(i));
+        }
     }
 }

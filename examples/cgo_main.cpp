@@ -1,6 +1,7 @@
 #include "examples.h"
 #include "cgo.h"
 #include <QApplication>
+#include <QTextCodec>
 
 using namespace std;
 

@@ -18,14 +18,13 @@ public:
     ~Goline();
 
 public:
-    Cgo* cgo;
+    Cgo *cgo;
 
 public:
     int setCgo(Cgo*);
 
 private slots:
     void on_pushButton_clicked();
-
     void on_pushButton_2_clicked();
 
 private:
