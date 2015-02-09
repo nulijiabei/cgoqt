@@ -26,13 +26,12 @@ extern "C" int cgo_start()
     return a.exec();
 }
 
-extern "C" void cgo_callback(void * p)
-{
-    win->sendDisplay((char*)p);
-}
-
 extern "C" void drv_cgo_callback(void* _a, void* _b)
 {
     cgo->setCgo(_a, _b);
 }
 
+extern "C" void display_cgo_callback(void * p)
+{
+    win->sendDisplay((char*)p);
+}

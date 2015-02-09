@@ -1,6 +1,5 @@
 #include "connect.h"
 #include "ui_connect.h"
-// #include "cgo_connect.h"
 #include "cgo.h"
 
 Connect::Connect(QWidget *parent) :

@@ -24,6 +24,7 @@ public:
     ~Examples();
 
 public:
+    bool stat;
     Cgo *cgo;
     QTimer *timer;
     QStringList *history;
@@ -33,7 +34,11 @@ public:
 public:
     void appendHistory(const QString&);
     void sendDisplay(const char *);
+    void sendKeyword();
     int setCgo(Cgo*);
+
+protected:
+    bool eventFilter(QObject *obj, QEvent *ev);
 
 private slots:
     void onCommandChanged(const QString&);
