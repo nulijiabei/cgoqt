@@ -67,7 +67,7 @@ func (this *Conn) ReadConn() {
 
 		// 设备返回信息
 		if ok && !z.IsBlank(rd) {
-			cgo_display(rd)
+			display_cgo_callback(rd)
 		}
 
 		// 服务器返回信息

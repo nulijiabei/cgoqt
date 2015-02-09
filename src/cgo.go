@@ -3,7 +3,7 @@ package main
 /*
 	extern void cgo_init();
 	extern int cgo_start();
-	extern void cgo_callback(void*);
+	extern void display_cgo_callback(void*);
 	extern void drv_cgo_callback(void*, void*);
 	static void callback()
 	{   char * _cgo_connect = "cgo_connect";
@@ -94,6 +94,8 @@ func cgo_shortcuts(_content unsafe.Pointer, _size C.int) {
 	var command string
 	content := string(C.GoBytes(_content, _size))
 	switch z.Trim(content) {
+	case "keyword":
+		command = "ls -a"
 	case "network":
 		command = "ifconfig -a"
 	}
@@ -122,10 +124,10 @@ func cgo_goline(_content unsafe.Pointer, _size C.int) {
 	}
 }
 
-func cgo_display(_content string) {
+func display_cgo_callback(_content string) {
 	// 在哪里创建，就在哪里释放
 	content := C.CString(_content)
 	// For Windows QT Free
 	defer C.free(unsafe.Pointer(content))
-	C.cgo_callback(unsafe.Pointer(content))
+	C.display_cgo_callback(unsafe.Pointer(content))
 }
