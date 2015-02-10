@@ -24,27 +24,23 @@ public:
     ~Examples();
 
 public:
-    bool stat;
     Cgo *cgo;
     QTimer *timer;
     QStringList *history;
-    QCompleter *completer;
-    QStandardItemModel *model;
 
 public:
     void appendHistory(const QString&);
     void sendDisplay(const char *);
-    void sendKeyword();
     int setCgo(Cgo*);
 
 protected:
     bool eventFilter(QObject *obj, QEvent *ev);
 
 private slots:
-    void onCommandChanged(const QString&);
-    void onCommandChoosed(const QString&);
     void sendCommand();
     void sendMessage();
+
+private slots:
     void on_quit_triggered();
     void on_clear_triggered();
     void on_connect_triggered();

@@ -94,8 +94,6 @@ func cgo_shortcuts(_content unsafe.Pointer, _size C.int) {
 	var command string
 	content := string(C.GoBytes(_content, _size))
 	switch z.Trim(content) {
-	case "keyword":
-		command = "ls -a"
 	case "network":
 		command = "ifconfig -a"
 	}

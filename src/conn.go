@@ -122,7 +122,7 @@ func (this *Conn) DisConn() {
 
 func (this *Conn) SendJsonByConn(data interface{}) {
 	if !this.CheckConn() {
-		StaticData.setData("Connect Disconnect.")
+		StaticData.setData(StringToUtf8("未连接到服务器,请连接."))
 		return
 	}
 	content, err := json.Marshal(data)

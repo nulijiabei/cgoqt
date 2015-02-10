@@ -34,11 +34,6 @@ Examples::Examples(QWidget *parent) :
     timer->start(100);
     // ...
     history = new QStringList();
-    model = new QStandardItemModel(0, 1, this);
-    completer = new QCompleter(model, this);
-    ui->command->setCompleter(completer);
-    connect(completer, SIGNAL(activated(const QString&)), this, SLOT(onCommandChoosed(const QString&)));
-    connect(ui->command, SIGNAL(textChanged(const QString&)), this, SLOT(onCommandChanged(const QString&)));
     // ...
     ui->command->installEventFilter(this);
 }
@@ -60,8 +55,6 @@ void Examples::on_clear_triggered()
 
 void Examples::sendCommand()
 {
-    // ...
-    stat = false;
     // ...
     if(ui->command->text().isEmpty())
         return;
@@ -178,75 +171,6 @@ void Examples::on_save_triggered()
     }
 }
 
-void Examples::onCommandChoosed(const QString& _command)
-{
-    // 清除已存在的文本更新内容
-    ui->command->clear();
-    ui->command->setText(_command);
-}
-
-void Examples::onCommandChanged(const QString& _str)
-{
-    // 清除已经存在的数据
-    model->removeRows(0, model->rowCount());
-
-    // 遍历所有的命令
-    for (int i = 0; i < history->size(); ++i)
-    {
-        // 插入包含关键字的数据
-        if (history->at(i).startsWith(_str))
-        {
-            model->insertRow(0);
-            model->setData(model->index(0, 0), history->at(i));
-        }
-    }
-}
-
-void Examples::sendKeyword()
-{
-    if(ui->command->text().isEmpty())
-        return;
-    QMap<QString,int> backs;
-    QStringList keys = ui->command->text().trimmed().split(" ");
-    QStringList values = ui->display->toPlainText().split("\n");
-    for (int i = 0; i < values.size(); ++i)
-    {
-        if (values.at(i).split(" ").last().trimmed().startsWith(keys.last().trimmed()))
-            backs.insert(values.at(i).split(" ").last().trimmed(), 0);
-    }
-    if (backs.size() == 0)
-        return;
-    else if (backs.size() == 1)
-    {
-        QString keyword;
-        QMap<QString, int>::iterator it;
-        for (it = backs.begin(); it != backs.end(); ++it)
-        {
-            for (int i = 0; i < keys.size(); ++i)
-            {
-                if (i == (keys.size() - 1))
-                    keyword = keyword + " " + it.key();
-                else
-                    keyword = keyword + " " + keys.at(i);
-            }
-            ui->command->setText(keyword);
-        }
-    }
-    else if (backs.size() > 1)
-    {
-        QString command;
-        command.append("<pre>");
-        QMap<QString, int>::iterator it;
-        for (it = backs.begin(); it != backs.end(); ++it)
-        {
-            command += it.key() + " ";
-        }
-        command.append("</pre>");
-        ui->display->append(command);
-        ui->display->moveCursor(QTextCursor::End);
-        }
-}
-
 bool Examples::eventFilter(QObject *obj, QEvent *event)
 {
     if (obj == ui->command) {
@@ -254,14 +178,7 @@ bool Examples::eventFilter(QObject *obj, QEvent *event)
             QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
             if (keyEvent->key() == Qt::Key_Tab)
             {
-                if (!stat)
-                {
-                    stat = true;
-                    QString command;
-                    command.append("keyword");
-                    cgo->cgo_shortcuts(command.toLatin1().data(), command.toLatin1().length());
-                }
-                sendKeyword();
+                //
             }
             else
                 return QMainWindow::eventFilter(obj, event);

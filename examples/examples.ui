@@ -257,10 +257,15 @@
   <action name="member">
    <property name="icon">
     <iconset resource="examples.qrc">
-     <normaloff>:/mm.png</normaloff>:/mm.png</iconset>
+     <normaloff>:/skip.png</normaloff>:/skip.png</iconset>
    </property>
    <property name="text">
     <string>跳跃(&amp;T)</string>
+   </property>
+  </action>
+  <action name="action_M">
+   <property name="text">
+    <string>历史(&amp;M)</string>
    </property>
   </action>
  </widget>
