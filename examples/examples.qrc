@@ -9,5 +9,6 @@
         <file>disc.png</file>
         <file>clear.png</file>
         <file>skip.png</file>
+        <file>edit.png</file>
     </qresource>
 </RCC>

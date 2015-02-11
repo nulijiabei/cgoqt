@@ -1,6 +1,7 @@
 #ifndef CONNECT_H
 #define CONNECT_H
 
+
 #include <QDialog>
 #include <QMessageBox>
 #include "cgo.h"

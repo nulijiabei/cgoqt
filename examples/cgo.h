@@ -11,8 +11,8 @@ typedef int (*COMMAND_CGO_CHECKCONN_FUNCTION)();
 typedef void (*COMMAND_CGO_DISCONN_FUNCTION)();
 typedef void (*COMMAND_CGO_COMMAND_FUNCTION)(void*, int);
 typedef void (*COMMAND_CGO_SHORTCUTS_FUNCTION)(void*, int);
-typedef void * (*COMMAND_CGO_MESSAGE_FUNCTION)();
 typedef int (*COMMAND_CGO_GOLINE_FUNCTION)(void*, int);
+typedef void (*COMMAND_CGO_READER_FUNCTION)(void*, int);
 
 class Cgo
 {
@@ -25,8 +25,8 @@ public:
     COMMAND_CGO_DISCONN_FUNCTION cgo_disconn;
     COMMAND_CGO_COMMAND_FUNCTION cgo_command;
     COMMAND_CGO_SHORTCUTS_FUNCTION cgo_shortcuts;
-    COMMAND_CGO_MESSAGE_FUNCTION cgo_message;
     COMMAND_CGO_GOLINE_FUNCTION cgo_goline;
+    COMMAND_CGO_READER_FUNCTION cgo_reader;
 };
 
 #endif // CGO_H

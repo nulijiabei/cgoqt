@@ -18,18 +18,21 @@ SOURCES +=\
     connect.cpp \
     goline.cpp \
     cgo.cpp \
-    main.cpp
+    main.cpp \
+    editor.cpp
 
 HEADERS  += \
     examples.h \
     connect.h \
     goline.h \
-    cgo.h
+    cgo.h \
+    editor.h
 
 FORMS    += \
     examples.ui \
     connect.ui \
-    goline.ui
+    goline.ui \
+    editor.ui
 
 RESOURCES += \
     examples.qrc

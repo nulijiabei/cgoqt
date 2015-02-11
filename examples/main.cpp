@@ -1,7 +1,8 @@
-#include "examples.h"
-#include "cgo.h"
 #include <QApplication>
 #include <QTextCodec>
+#include "examples.h"
+#include "cgo.h"
+
 
 using namespace std;
 
@@ -40,4 +41,9 @@ extern "C" void recvMessageByCgo(const char * _content)
 extern "C" void recvDisplayByCgo(const char * _content)
 {
    win->recvDisplayByCgo(_content);
+}
+
+extern "C" void recvContentByCgo(const char * _content)
+{
+    win->recvContentByCgo(_content);
 }

@@ -1,9 +1,11 @@
 #ifndef GOLINE_H
 #define GOLINE_H
 
+
 #include <QDialog>
 #include <QMessageBox>
 #include "cgo.h"
+
 
 namespace Ui {
 class Goline;

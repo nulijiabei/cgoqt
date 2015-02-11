@@ -1,12 +1,14 @@
+#include <QFileDialog>
+#include <QTextStream>
+#include <QDebug>
+#include <QKeyEvent>
 #include "examples.h"
 #include "ui_examples.h"
 #include "connect.h"
 #include "goline.h"
 #include "cgo.h"
-#include <QFileDialog>
-#include <QTextStream>
-#include <QDebug>
-#include <QKeyEvent>
+#include "editor.h"
+
 
 Examples::Examples(QWidget *parent) :
     QMainWindow(parent),
@@ -29,8 +31,12 @@ Examples::Examples(QWidget *parent) :
     // 信号连接
     connect(ui->command, SIGNAL(returnPressed()), this, SLOT(sendCommandsToCgo()));
     connect(this, SIGNAL(send_message_signal(const QString&)), this, SLOT(on_message_signal(const QString&)));
-    // ...
+    // 事件捕捉
     ui->command->installEventFilter(this);
+    // 文本编辑器
+    edit = new Editor(this);
+    connect(this, SIGNAL(send_content_signal(const QString&)), edit, SLOT(on_content_signal(const QString&)));
+    // ...
 }
 
 Examples::~Examples()
@@ -56,6 +62,12 @@ void Examples::recvDisplayByCgo(const char *_content)
     command.append("</pre>");
     ui->display->append(command);
     ui->display->moveCursor(QTextCursor::End);
+}
+
+// CGO
+void Examples::recvContentByCgo(const char *_content)
+{
+    emit send_content_signal(tr(_content));
 }
 
 void Examples::on_message_signal(const QString &_content)
@@ -178,4 +190,11 @@ bool Examples::eventFilter(QObject *obj, QEvent *event)
     } else
         // pass the event on to the parent class
         return QMainWindow::eventFilter(obj, event);
+}
+
+// ...
+void Examples::on_edit_triggered()
+{
+    edit->setCgo(cgo);
+    edit->show();
 }

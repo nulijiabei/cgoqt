@@ -10,25 +10,26 @@ package main
 		char * _cgo_disconn = "cgo_disconn";
 		char * _cgo_command = "cgo_command";
 		char * _cgo_shortcuts = "cgo_shortcuts";
-		// char * _cgo_message = "cgo_message";
 		char * _cgo_goline = "cgo_goline";
+		char * _cgo_reader = "cgo_reader";
 		extern int cgo_connect(void*, int, void*, int);
 		extern int cgo_checkconn();
 		extern void cgo_disconn();
 		extern void cgo_command(void*, int);
 		extern void cgo_shortcuts(void*, int);
-		// extern void* cgo_message();
 		extern void cgo_goline(void*, int);
+		extern void cgo_reader(void*, int);
 		drv_cgo_callback(_cgo_connect, &cgo_connect);
 		drv_cgo_callback(_cgo_checkconn, &cgo_checkconn);
 		drv_cgo_callback(_cgo_disconn, &cgo_disconn);
 		drv_cgo_callback(_cgo_command, &cgo_command);
 		drv_cgo_callback(_cgo_shortcuts, &cgo_shortcuts);
-		// drv_cgo_callback(_cgo_message, &cgo_message);
 		drv_cgo_callback(_cgo_goline, &cgo_goline);
+		drv_cgo_callback(_cgo_reader, &cgo_reader);
 	}
 	extern void recvMessageByCgo(void*);
 	extern void recvDisplayByCgo(void*);
+	extern void recvContentByCgo(void*);
 */
 // #include <stdio.h>
 // #include <stdlib.h>
@@ -86,7 +87,19 @@ func cgo_disconn() {
 //export cgo_command
 func cgo_command(_content unsafe.Pointer, _size C.int) {
 	command := string(C.GoBytes(_content, _size))
-	StaticConn.SendCommandByConn(z.Trim(command))
+	err := StaticConn.SendCommandByConn(z.Trim(command))
+	if err != nil {
+		cgo_message(err.Error())
+	}
+}
+
+//export cgo_reader
+func cgo_reader(_content unsafe.Pointer, _size C.int) {
+	command := string(C.GoBytes(_content, _size))
+	err := StaticConn.SendReaderByConn(z.Trim(command))
+	if err != nil {
+		cgo_message(err.Error())
+	}
 }
 
 //export cgo_shortcuts
@@ -98,7 +111,10 @@ func cgo_shortcuts(_content unsafe.Pointer, _size C.int) {
 		command = "ifconfig -a"
 	}
 	if !z.IsBlank(command) {
-		StaticConn.SendCommandByConn(z.Trim(command))
+		err := StaticConn.SendCommandByConn(z.Trim(command))
+		if err != nil {
+			cgo_message(err.Error())
+		}
 	}
 }
 
@@ -107,7 +123,10 @@ func cgo_goline(_content unsafe.Pointer, _size C.int) {
 	content := string(C.GoBytes(_content, _size))
 	data := strings.Split(z.Trim(content), " ")
 	if len(data) == 4 {
-		StaticConn.SendGolineByConn(z.Trim(data[0]), z.Trim(data[1]), z.Trim(data[2]), z.Trim(data[3]))
+		err := StaticConn.SendGolineByConn(z.Trim(data[0]), z.Trim(data[1]), z.Trim(data[2]), z.Trim(data[3]))
+		if err != nil {
+			cgo_message(err.Error())
+		}
 	}
 }
 
@@ -125,4 +144,12 @@ func cgo_display(_content string) {
 	// For Windows QT Free
 	defer C.free(unsafe.Pointer(content))
 	C.recvDisplayByCgo(unsafe.Pointer(content))
+}
+
+// C
+func cgo_content(_content string) {
+	content := C.CString(_content)
+	// For Windows QT Free
+	defer C.free(unsafe.Pointer(content))
+	C.recvContentByCgo(unsafe.Pointer(content))
 }

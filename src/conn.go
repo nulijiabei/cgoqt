@@ -59,37 +59,81 @@ func (this *Conn) ReadConn() {
 			continue
 		}
 
+		/*
+			id, err := js.Get("id").String()
+			if err != nil {
+				log.Printf("Connect(Server) exception(%s)", err.Error())
+				continue
+			}
+		*/
+
+		class, err := js.Get("type").String()
+		if err != nil {
+			log.Printf("Connect(Server) exception(%s)", err.Error())
+			continue
+		}
+
 		rd, err := js.Get("data").String()
 		if err != nil {
 			log.Printf("Connect(Server) exception(%s)", err.Error())
 			continue
 		}
 
-		// 设备返回信息
-		if ok && !z.IsBlank(rd) {
-			cgo_display(rd)
+		// 服务器返回信息
+		// 只有在异常时才是False
+		if !ok && !z.IsBlank(rd) {
+			// CGO
+			cgo_message(rd)
+			// 返回
+			continue
 		}
 
-		// 服务器返回信息
-		if !ok && !z.IsBlank(rd) {
-			cgo_message(rd)
+		// 设备返回信息
+		if ok {
+
+			// 文件类型
+			if class == "reader" {
+				// CGO
+				cgo_content(rd)
+				// 返回
+				continue
+			}
+
+			// 终端输出
+			if !z.IsBlank(rd) {
+				// CGO
+				cgo_display(rd)
+				// 返回
+				continue
+			}
+
 		}
 
 	}
 
 }
 
-func (this *Conn) SendCommandByConn(_command string) {
+func (this *Conn) SendReaderByConn(_command string) error {
+	command := make(map[string]interface{})
+	command["id"] = z.UnixNano()
+	command["type"] = "reader"
+	command["path"] = _command
+	data, _ := json.MarshalIndent(command, "", "  ")
+	log.Printf("Connect(Server) Command -> \n%s\n", data)
+	return this.SendJsonByConn(command)
+}
+
+func (this *Conn) SendCommandByConn(_command string) error {
 	command := make(map[string]interface{})
 	command["id"] = z.UnixNano()
 	command["type"] = "command"
 	command["command"] = _command
 	data, _ := json.MarshalIndent(command, "", "  ")
 	log.Printf("Connect(Server) Command -> \n%s\n", data)
-	this.SendJsonByConn(command)
+	return this.SendJsonByConn(command)
 }
 
-func (this *Conn) SendGolineByConn(_ipaddr, _username, _password, _color string) {
+func (this *Conn) SendGolineByConn(_ipaddr, _username, _password, _color string) error {
 	command := make(map[string]interface{})
 	command["id"] = z.UnixNano()
 	command["type"] = "goline"
@@ -103,7 +147,7 @@ func (this *Conn) SendGolineByConn(_ipaddr, _username, _password, _color string)
 	}
 	data, _ := json.MarshalIndent(command, "", "  ")
 	log.Printf("Connect(Server) Command -> \n%s\n", data)
-	this.SendJsonByConn(command)
+	return this.SendJsonByConn(command)
 }
 
 func (this *Conn) CheckConn() bool {
@@ -120,19 +164,17 @@ func (this *Conn) DisConn() {
 	}
 }
 
-func (this *Conn) SendJsonByConn(data interface{}) {
+func (this *Conn) SendJsonByConn(data interface{}) error {
 	if !this.CheckConn() {
-		cgo_message(StringToUtf8("未连接到服务器,请连接."))
-		return
+		return fmt.Errorf(StringToUtf8("未连接到服务器,请连接."))
 	}
 	content, err := json.Marshal(data)
 	if err != nil {
-		cgo_message(err.Error())
-		return
+		return err
 	}
 	_, err = io.WriteString(this.Ws, string(content)+"\n")
 	if err != nil {
-		cgo_message(err.Error())
-		return
+		return err
 	}
+	return nil
 }

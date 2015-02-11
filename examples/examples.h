@@ -1,13 +1,15 @@
 #ifndef EXAMPLES_H
 #define EXAMPLES_H
 
-#include "cgo.h"
+
 #include <QDialog>
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QTimer>
 #include <QStandardItemModel>
 #include <QCompleter>
+#include "cgo.h"
+#include "editor.h"
 
 using namespace std;
 
@@ -26,10 +28,12 @@ public:
 public:
     Cgo *cgo;
     QTimer *timer;
+    Editor *edit;
 
 public:
     void recvDisplayByCgo(const char *);
     void recvMessageByCgo(const char *);
+    void recvContentByCgo(const char *);
     int setCgo(Cgo*);
 
 protected:
@@ -37,6 +41,7 @@ protected:
 
 signals:
     void send_message_signal(const QString &);
+    void send_content_signal(const QString &);
 
 private slots:
     void sendCommandsToCgo();
@@ -51,6 +56,8 @@ private slots:
     void on_network_triggered();
     void on_member_triggered();
     void on_save_triggered();
+
+    void on_edit_triggered();
 
 private:
     Ui::Examples *ui;
