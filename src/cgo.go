@@ -42,21 +42,21 @@ import (
 	"strings"
 )
 
+// 全局连接
 var StaticConn *Conn
 
-var StaticData *Data
-
+// 开始
 func start() {
 	C.init()
 	C.callback()
 	C.start()
 }
 
+// 主
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	log.SetFlags(log.Lshortfile | log.Ldate | log.Ltime | log.Lmicroseconds)
 	StaticConn = NewConn()
-	StaticData = NewData()
 	start()
 }
 
@@ -102,43 +102,6 @@ func cgo_shortcuts(_content unsafe.Pointer, _size C.int) {
 	}
 }
 
-/*
-//export cgo_message
-func cgo_message() unsafe.Pointer {
-	// ...
-	// data := <-static
-	data := "aaa"
-	log.Println("---------", data)
-	// 在哪里创建，就在哪里释放
-	content := C.CString(data)
-	// For Windows QT Free
-	defer C.free(unsafe.Pointer(content))
-	return unsafe.Pointer(content)
-	/*
-		data := StaticData.getData()
-		StaticData.delData()
-		// 在哪里创建，就在哪里释放
-		content := C.CString(data)
-		// For Windows QT Free
-		defer C.free(unsafe.Pointer(content))
-		return unsafe.Pointer(content)
-*/
-// }
-
-func cgo_message(_content string) {
-	content := C.CString(_content)
-	// For Windows QT Free
-	defer C.free(unsafe.Pointer(content))
-	C.recvMessageByCgo(unsafe.Pointer(content))
-}
-
-func cgo_display(_content string) {
-	content := C.CString(_content)
-	// For Windows QT Free
-	defer C.free(unsafe.Pointer(content))
-	C.recvDisplayByCgo(unsafe.Pointer(content))
-}
-
 //export cgo_goline
 func cgo_goline(_content unsafe.Pointer, _size C.int) {
 	content := string(C.GoBytes(_content, _size))
@@ -146,4 +109,20 @@ func cgo_goline(_content unsafe.Pointer, _size C.int) {
 	if len(data) == 4 {
 		StaticConn.SendGolineByConn(z.Trim(data[0]), z.Trim(data[1]), z.Trim(data[2]), z.Trim(data[3]))
 	}
+}
+
+// C
+func cgo_message(_content string) {
+	content := C.CString(_content)
+	// For Windows QT Free
+	defer C.free(unsafe.Pointer(content))
+	C.recvMessageByCgo(unsafe.Pointer(content))
+}
+
+// C
+func cgo_display(_content string) {
+	content := C.CString(_content)
+	// For Windows QT Free
+	defer C.free(unsafe.Pointer(content))
+	C.recvDisplayByCgo(unsafe.Pointer(content))
 }

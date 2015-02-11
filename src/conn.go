@@ -122,17 +122,17 @@ func (this *Conn) DisConn() {
 
 func (this *Conn) SendJsonByConn(data interface{}) {
 	if !this.CheckConn() {
-		StaticData.setData(StringToUtf8("未连接到服务器,请连接."))
+		cgo_message(StringToUtf8("未连接到服务器,请连接."))
 		return
 	}
 	content, err := json.Marshal(data)
 	if err != nil {
-		StaticData.setData(err.Error())
+		cgo_message(err.Error())
 		return
 	}
 	_, err = io.WriteString(this.Ws, string(content)+"\n")
 	if err != nil {
-		StaticData.setData(err.Error())
+		cgo_message(err.Error())
 		return
 	}
 }
