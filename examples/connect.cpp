@@ -17,7 +17,7 @@ Connect::~Connect()
 int Connect::setCgo(Cgo *_a)
 {
     cgo = _a;
-    return 0;
+    return 1;
 }
 
 void Connect::on_pushButton_clicked()

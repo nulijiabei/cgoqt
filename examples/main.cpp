@@ -9,12 +9,12 @@ Examples * win;
 
 Cgo * cgo;
 
-extern "C" void cgo_init()
+extern "C" void init()
 {
     cgo = new Cgo();
 }
 
-extern "C" int cgo_start()
+extern "C" int start()
 {
     int argc = 0 ;
     char *argv[] = {};
@@ -31,7 +31,13 @@ extern "C" void drv_cgo_callback(void* _a, void* _b)
     cgo->setCgo(_a, _b);
 }
 
-extern "C" void display_cgo_callback(void * p)
+
+extern "C" void recvMessageByCgo(const char * _content)
 {
-    win->sendDisplay((char*)p);
+   win->recvMessageByCgo(_content);
+}
+
+extern "C" void recvDisplayByCgo(const char * _content)
+{
+   win->recvDisplayByCgo(_content);
 }

@@ -18,7 +18,7 @@ Goline::~Goline()
 int Goline::setCgo(Cgo *_a)
 {
     cgo = _a;
-    return 0;
+    return 1;
 }
 
 void Goline::on_pushButton_clicked()

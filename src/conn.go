@@ -67,12 +67,12 @@ func (this *Conn) ReadConn() {
 
 		// 设备返回信息
 		if ok && !z.IsBlank(rd) {
-			display_cgo_callback(rd)
+			cgo_display(rd)
 		}
 
 		// 服务器返回信息
 		if !ok && !z.IsBlank(rd) {
-			StaticData.setData(rd)
+			cgo_message(rd)
 		}
 
 	}

@@ -1,9 +1,8 @@
 package main
 
 /*
-	extern void cgo_init();
-	extern int cgo_start();
-	extern void display_cgo_callback(void*);
+	extern void init();
+	extern int start();
 	extern void drv_cgo_callback(void*, void*);
 	static void callback()
 	{   char * _cgo_connect = "cgo_connect";
@@ -11,24 +10,25 @@ package main
 		char * _cgo_disconn = "cgo_disconn";
 		char * _cgo_command = "cgo_command";
 		char * _cgo_shortcuts = "cgo_shortcuts";
-		char * _cgo_message = "cgo_message";
+		// char * _cgo_message = "cgo_message";
 		char * _cgo_goline = "cgo_goline";
 		extern int cgo_connect(void*, int, void*, int);
 		extern int cgo_checkconn();
 		extern void cgo_disconn();
 		extern void cgo_command(void*, int);
 		extern void cgo_shortcuts(void*, int);
-		extern void* cgo_message();
+		// extern void* cgo_message();
 		extern void cgo_goline(void*, int);
 		drv_cgo_callback(_cgo_connect, &cgo_connect);
 		drv_cgo_callback(_cgo_checkconn, &cgo_checkconn);
 		drv_cgo_callback(_cgo_disconn, &cgo_disconn);
 		drv_cgo_callback(_cgo_command, &cgo_command);
 		drv_cgo_callback(_cgo_shortcuts, &cgo_shortcuts);
-		drv_cgo_callback(_cgo_message, &cgo_message);
+		// drv_cgo_callback(_cgo_message, &cgo_message);
 		drv_cgo_callback(_cgo_goline, &cgo_goline);
-
 	}
+	extern void recvMessageByCgo(void*);
+	extern void recvDisplayByCgo(void*);
 */
 // #include <stdio.h>
 // #include <stdlib.h>
@@ -47,9 +47,9 @@ var StaticConn *Conn
 var StaticData *Data
 
 func start() {
-	C.cgo_init()
+	C.init()
 	C.callback()
-	C.cgo_start()
+	C.start()
 }
 
 func main() {
@@ -102,15 +102,41 @@ func cgo_shortcuts(_content unsafe.Pointer, _size C.int) {
 	}
 }
 
+/*
 //export cgo_message
 func cgo_message() unsafe.Pointer {
-	data := StaticData.getData()
-	StaticData.delData()
+	// ...
+	// data := <-static
+	data := "aaa"
+	log.Println("---------", data)
 	// 在哪里创建，就在哪里释放
 	content := C.CString(data)
 	// For Windows QT Free
 	defer C.free(unsafe.Pointer(content))
 	return unsafe.Pointer(content)
+	/*
+		data := StaticData.getData()
+		StaticData.delData()
+		// 在哪里创建，就在哪里释放
+		content := C.CString(data)
+		// For Windows QT Free
+		defer C.free(unsafe.Pointer(content))
+		return unsafe.Pointer(content)
+*/
+// }
+
+func cgo_message(_content string) {
+	content := C.CString(_content)
+	// For Windows QT Free
+	defer C.free(unsafe.Pointer(content))
+	C.recvMessageByCgo(unsafe.Pointer(content))
+}
+
+func cgo_display(_content string) {
+	content := C.CString(_content)
+	// For Windows QT Free
+	defer C.free(unsafe.Pointer(content))
+	C.recvDisplayByCgo(unsafe.Pointer(content))
 }
 
 //export cgo_goline
@@ -120,12 +146,4 @@ func cgo_goline(_content unsafe.Pointer, _size C.int) {
 	if len(data) == 4 {
 		StaticConn.SendGolineByConn(z.Trim(data[0]), z.Trim(data[1]), z.Trim(data[2]), z.Trim(data[3]))
 	}
-}
-
-func display_cgo_callback(_content string) {
-	// 在哪里创建，就在哪里释放
-	content := C.CString(_content)
-	// For Windows QT Free
-	defer C.free(unsafe.Pointer(content))
-	C.display_cgo_callback(unsafe.Pointer(content))
 }

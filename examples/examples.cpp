@@ -27,13 +27,8 @@ Examples::Examples(QWidget *parent) :
     pal.setColor(QPalette::Base, QColor(255,228,196));
     ui->display->setPalette(pal);
     // 信号连接
-    connect(ui->command, SIGNAL(returnPressed()), this, SLOT(sendCommand()));
-    // 定时器
-    timer = new QTimer();
-    connect(timer,SIGNAL(timeout()), this, SLOT(sendMessage()));
-    timer->start(100);
-    // ...
-    history = new QStringList();
+    connect(ui->command, SIGNAL(returnPressed()), this, SLOT(sendCommandsToCgo()));
+    connect(this, SIGNAL(send_message_signal(const QString&)), this, SLOT(on_message_signal(const QString&)));
     // ...
     ui->command->installEventFilter(this);
 }
@@ -41,6 +36,31 @@ Examples::Examples(QWidget *parent) :
 Examples::~Examples()
 {
     delete ui;
+}
+
+// CGO
+void Examples::recvMessageByCgo(const char *_content)
+{
+    // 由于CGO无法直接调用到QMessageBox所以此处使用信号发送
+    QString command = (char*)_content;
+    if (!command.isEmpty())
+        emit send_message_signal(command);
+}
+
+// CGO
+void Examples::recvDisplayByCgo(const char *_content)
+{
+    QString command;
+    command.append("<pre>");
+    command.append(tr(_content));
+    command.append("</pre>");
+    ui->display->append(command);
+    ui->display->moveCursor(QTextCursor::End);
+}
+
+void Examples::on_message_signal(const QString &_content)
+{
+    QMessageBox::information(this, tr("提示"), tr(_content.toLatin1().data()), QMessageBox::Yes);
 }
 
 void Examples::on_quit_triggered()
@@ -53,14 +73,10 @@ void Examples::on_clear_triggered()
     ui->display->clear();
 }
 
-void Examples::sendCommand()
+void Examples::sendCommandsToCgo()
 {
-    // ...
     if(ui->command->text().isEmpty())
         return;
-    // ...
-    appendHistory(ui->command->text());
-    // ...
     QString command;
     command.append("<pre>");
     command.append("# ");
@@ -72,33 +88,6 @@ void Examples::sendCommand()
     ui->command->clear();
 }
 
-void Examples::appendHistory(const QString &_str)
-{
-    for (int i = 0; i < history->size(); ++i)
-    {
-        if (history->at(i).compare(_str.trimmed()) == 0)
-            return;
-    }
-    history->append(_str.trimmed());
-}
-
-void Examples::sendDisplay(const char * _content)
-{
-    QString command;
-    command.append("<pre>");
-    command.append(tr(_content));
-    command.append("</pre>");
-    ui->display->append(command);
-    ui->display->moveCursor(QTextCursor::End);
-}
-
-void Examples::sendMessage()
-{
-    void * p = cgo->cgo_message();
-    QString command = (char*)p;
-    if (!command.isEmpty())
-        QMessageBox::information(this, tr("提示"), tr(command.toLatin1().data()), QMessageBox::Yes);
-}
 
 void Examples::on_connect_triggered()
 {
@@ -109,6 +98,7 @@ void Examples::on_connect_triggered()
 
 void Examples::on_help_triggered()
 {
+
     QMessageBox::information(this, tr("帮助"), tr("德纳科技"), QMessageBox::Yes);
 }
 
@@ -148,7 +138,7 @@ void Examples::on_member_triggered()
 int Examples::setCgo(Cgo *_a)
 {
     cgo = _a;
-    return 0;
+    return 1;
 }
 
 void Examples::on_save_triggered()

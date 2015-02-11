@@ -16,9 +16,9 @@ TEMPLATE = lib
 SOURCES +=\
     examples.cpp \
     connect.cpp \
-    cgo_main.cpp \
     goline.cpp \
-    cgo.cpp
+    cgo.cpp \
+    main.cpp
 
 HEADERS  += \
     examples.h \

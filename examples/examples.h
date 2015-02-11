@@ -26,19 +26,21 @@ public:
 public:
     Cgo *cgo;
     QTimer *timer;
-    QStringList *history;
 
 public:
-    void appendHistory(const QString&);
-    void sendDisplay(const char *);
+    void recvDisplayByCgo(const char *);
+    void recvMessageByCgo(const char *);
     int setCgo(Cgo*);
 
 protected:
     bool eventFilter(QObject *obj, QEvent *ev);
 
+signals:
+    void send_message_signal(const QString &);
+
 private slots:
-    void sendCommand();
-    void sendMessage();
+    void sendCommandsToCgo();
+    void on_message_signal(const QString &);
 
 private slots:
     void on_quit_triggered();
