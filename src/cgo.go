@@ -12,6 +12,7 @@ package main
 		char * _cgo_shortcuts = "cgo_shortcuts";
 		char * _cgo_goline = "cgo_goline";
 		char * _cgo_reader = "cgo_reader";
+		char * _cgo_writer = "cgo_writer";
 		extern int cgo_connect(void*, int, void*, int);
 		extern int cgo_checkconn();
 		extern void cgo_disconn();
@@ -19,6 +20,7 @@ package main
 		extern void cgo_shortcuts(void*, int);
 		extern void cgo_goline(void*, int);
 		extern void cgo_reader(void*, int);
+		extern void cgo_writer(void*, int, void*, int);
 		drv_cgo_callback(_cgo_connect, &cgo_connect);
 		drv_cgo_callback(_cgo_checkconn, &cgo_checkconn);
 		drv_cgo_callback(_cgo_disconn, &cgo_disconn);
@@ -26,6 +28,7 @@ package main
 		drv_cgo_callback(_cgo_shortcuts, &cgo_shortcuts);
 		drv_cgo_callback(_cgo_goline, &cgo_goline);
 		drv_cgo_callback(_cgo_reader, &cgo_reader);
+		drv_cgo_callback(_cgo_writer, &cgo_writer);
 	}
 	extern void recvMessageByCgo(void*);
 	extern void recvDisplayByCgo(void*);
@@ -97,6 +100,16 @@ func cgo_command(_content unsafe.Pointer, _size C.int) {
 func cgo_reader(_content unsafe.Pointer, _size C.int) {
 	command := string(C.GoBytes(_content, _size))
 	err := StaticConn.SendReaderByConn(z.Trim(command))
+	if err != nil {
+		cgo_message(err.Error())
+	}
+}
+
+//export cgo_writer
+func cgo_writer(_content unsafe.Pointer, _size C.int, _content_2 unsafe.Pointer, _size_2 C.int) {
+	command := string(C.GoBytes(_content, _size))
+	content := string(C.GoBytes(_content_2, _size_2))
+	err := StaticConn.SendWriterByConn(z.Trim(command), z.Trim(content))
 	if err != nil {
 		cgo_message(err.Error())
 	}

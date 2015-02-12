@@ -59,20 +59,6 @@ func (this *Conn) ReadConn() {
 			continue
 		}
 
-		/*
-			id, err := js.Get("id").String()
-			if err != nil {
-				log.Printf("Connect(Server) exception(%s)", err.Error())
-				continue
-			}
-		*/
-
-		class, err := js.Get("type").String()
-		if err != nil {
-			log.Printf("Connect(Server) exception(%s)", err.Error())
-			continue
-		}
-
 		rd, err := js.Get("data").String()
 		if err != nil {
 			log.Printf("Connect(Server) exception(%s)", err.Error())
@@ -91,10 +77,22 @@ func (this *Conn) ReadConn() {
 		// 设备返回信息
 		if ok {
 
+			// 类型
+			class, err := js.Get("type").String()
+			if err != nil {
+				log.Printf("Connect(Server) exception(%s)", err.Error())
+				continue
+			}
+
 			// 文件类型
 			if class == "reader" {
 				// CGO
 				cgo_content(rd)
+				// 返回
+				continue
+			} else if class == "writer" {
+				// CGO
+				cgo_message(rd)
 				// 返回
 				continue
 			}
@@ -118,6 +116,17 @@ func (this *Conn) SendReaderByConn(_command string) error {
 	command["id"] = z.UnixNano()
 	command["type"] = "reader"
 	command["path"] = _command
+	data, _ := json.MarshalIndent(command, "", "  ")
+	log.Printf("Connect(Server) Command -> \n%s\n", data)
+	return this.SendJsonByConn(command)
+}
+
+func (this *Conn) SendWriterByConn(_command string, _content string) error {
+	command := make(map[string]interface{})
+	command["id"] = z.UnixNano()
+	command["type"] = "writer"
+	command["path"] = _command
+	command["content"] = _content
 	data, _ := json.MarshalIndent(command, "", "  ")
 	log.Printf("Connect(Server) Command -> \n%s\n", data)
 	return this.SendJsonByConn(command)
