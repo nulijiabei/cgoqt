@@ -28,6 +28,8 @@ private slots:
     void on_pushButton_clicked();
     void on_content_signal(const QString &);
 
+    void on_pushButton_2_clicked();
+
 private:
     Ui::Editor *ui;
 };

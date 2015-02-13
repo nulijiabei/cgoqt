@@ -27,6 +27,7 @@ void Connect::on_pushButton_clicked()
 
 void Connect::on_pushButton_2_clicked()
 {
+
     if(ui->lineEdit->text().isEmpty())
     {
         return;

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>250</height>
+    <height>230</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -90,17 +90,6 @@
          </property>
          <property name="text">
           <string>123456</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_d">
-       <item alignment="Qt::AlignHCenter">
-        <widget class="QCheckBox" name="checkBox">
-         <property name="text">
-          <string>显示目录及文件颜色</string>
          </property>
         </widget>
        </item>

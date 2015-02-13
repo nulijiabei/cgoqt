@@ -130,7 +130,6 @@
     <addaction name="killall"/>
     <addaction name="shutdown"/>
     <addaction name="network"/>
-    <addaction name="openvpn"/>
    </widget>
    <addaction name="menu_main"/>
    <addaction name="menu_tool"/>
@@ -146,8 +145,6 @@
     <bool>true</bool>
    </attribute>
    <addaction name="network"/>
-   <addaction name="separator"/>
-   <addaction name="openvpn"/>
    <addaction name="separator"/>
    <addaction name="killall"/>
    <addaction name="separator"/>
@@ -253,11 +250,6 @@
     <string>网络信息(&amp;N)</string>
    </property>
   </action>
-  <action name="openvpn">
-   <property name="text">
-    <string>专用网络(&amp;V)</string>
-   </property>
-  </action>
   <action name="member">
    <property name="icon">
     <iconset resource="examples.qrc">
@@ -265,11 +257,6 @@
    </property>
    <property name="text">
     <string>跳跃(&amp;T)</string>
-   </property>
-  </action>
-  <action name="action_M">
-   <property name="text">
-    <string>历史(&amp;M)</string>
    </property>
   </action>
   <action name="edit">

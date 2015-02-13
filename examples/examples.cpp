@@ -198,3 +198,60 @@ void Examples::on_edit_triggered()
     edit->setCgo(cgo);
     edit->show();
 }
+
+void Examples::on_killall_triggered()
+{
+    int n = cgo->cgo_checkconn();
+    if (n != 1)
+    {
+        QMessageBox::information(this, tr("提示"), tr("未连接服务器,请先连接."), QMessageBox::Yes);
+        return;
+    }
+    QMessageBox::StandardButton rb = QMessageBox::information(this, tr("提示"), tr("您确定要重启程序吗?"), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    if(rb == QMessageBox::Yes)
+    {
+        QString command;
+        command.append("pkill");
+        cgo->cgo_shortcuts(command.toLatin1().data(), command.toLatin1().length());
+    }
+}
+
+void Examples::on_reboot_triggered()
+{
+    int n = cgo->cgo_checkconn();
+    if (n != 1)
+    {
+        QMessageBox::information(this, tr("提示"), tr("未连接服务器,请先连接."), QMessageBox::Yes);
+        return;
+    }
+    QMessageBox::StandardButton rb = QMessageBox::information(this, tr("提示"), tr("您确定要重启系统吗?"), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    if(rb == QMessageBox::Yes)
+    {
+        QString command;
+        command.append("reboot");
+        cgo->cgo_shortcuts(command.toLatin1().data(), command.toLatin1().length());
+    }
+}
+
+void Examples::on_shutdown_triggered()
+{
+    int n = cgo->cgo_checkconn();
+    if (n != 1)
+    {
+        QMessageBox::information(this, tr("提示"), tr("未连接服务器,请先连接."), QMessageBox::Yes);
+        return;
+    }
+    QMessageBox::StandardButton rb = QMessageBox::information(this, tr("提示"), tr("您确定要关闭系统吗?"), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    if(rb == QMessageBox::Yes)
+    {
+        QString command;
+        command.append("shutdown");
+        cgo->cgo_shortcuts(command.toLatin1().data(), command.toLatin1().length());
+    }
+}
+
+void Examples::on_upload_triggered()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, "Open File",QDir::currentPath());
+    qDebug() << fileName;
+}

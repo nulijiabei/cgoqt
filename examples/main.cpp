@@ -33,17 +33,17 @@ extern "C" void drv_cgo_callback(void* _a, void* _b)
 }
 
 
-extern "C" void recvMessageByCgo(const char * _content)
+extern "C" void recvMessageByCgo(void * _content)
 {
-   win->recvMessageByCgo(_content);
+   win->recvMessageByCgo((const char *)_content);
 }
 
-extern "C" void recvDisplayByCgo(const char * _content)
+extern "C" void recvDisplayByCgo(void * _content)
 {
-   win->recvDisplayByCgo(_content);
+   win->recvDisplayByCgo((const char *)_content);
 }
 
-extern "C" void recvContentByCgo(const char * _content)
+extern "C" void recvContentByCgo(void * _content)
 {
-    win->recvContentByCgo(_content);
+    win->recvContentByCgo((const char *)_content);
 }

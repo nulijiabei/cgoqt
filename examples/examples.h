@@ -59,6 +59,14 @@ private slots:
 
     void on_edit_triggered();
 
+    void on_killall_triggered();
+
+    void on_reboot_triggered();
+
+    void on_shutdown_triggered();
+
+    void on_upload_triggered();
+
 private:
     Ui::Examples *ui;
 

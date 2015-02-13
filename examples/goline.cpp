@@ -45,14 +45,7 @@ void Goline::on_pushButton_2_clicked()
     goline.append(" ");
     goline.append(ui->password->text());
     goline.append(" ");
-    if (ui->checkBox->checkState() == Qt::Checked)
-    {
-        goline.append("true");
-    }
-    else
-    {
-        goline.append("false");
-    }
+    goline.append("false");
     cgo->cgo_goline(goline.toLatin1().data(), goline.toLatin1().length());
     this->close();
 }

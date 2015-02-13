@@ -10,6 +10,7 @@ Cgo::Cgo()
     cgo_shortcuts = 0;
     cgo_goline = 0;
     cgo_reader = 0;
+    cgo_writer = 0;
 }
 
 int Cgo::setCgo(void* _a, void* _b)
@@ -28,5 +29,7 @@ int Cgo::setCgo(void* _a, void* _b)
         cgo_goline = (COMMAND_CGO_GOLINE_FUNCTION)_b;
     if (QString("cgo_reader").compare((char*)_a) == 0)
         cgo_reader = (COMMAND_CGO_READER_FUNCTION)_b;
+    if (QString("cgo_writer").compare((char*)_a) == 0)
+        cgo_writer = (COMMAND_CGO_WRITER_FUNCTION)_b;
     return 1;
 }
