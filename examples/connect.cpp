@@ -7,6 +7,7 @@ Connect::Connect(QWidget *parent) :
     ui(new Ui::Connect)
 {
     ui->setupUi(this);
+    ui->lineEdit_2->setPlaceholderText(tr("授权码."));
 }
 
 Connect::~Connect()

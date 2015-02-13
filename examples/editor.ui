@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>文本编辑器(提示:无法编辑跳跃后的设备文本)</string>
+   <string>文本编辑器</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>

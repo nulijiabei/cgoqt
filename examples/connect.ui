@@ -71,7 +71,7 @@
           </size>
          </property>
          <property name="text">
-          <string>授权码</string>
+          <string/>
          </property>
         </widget>
        </item>

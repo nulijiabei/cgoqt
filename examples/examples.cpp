@@ -111,7 +111,7 @@ void Examples::on_connect_triggered()
 void Examples::on_help_triggered()
 {
 
-    QMessageBox::information(this, tr("帮助"), tr("德纳科技"), QMessageBox::Yes);
+    QMessageBox::information(this, tr("帮助"), tr("德纳科技(1.03)"), QMessageBox::Yes);
 }
 
 void Examples::on_disconn_triggered()

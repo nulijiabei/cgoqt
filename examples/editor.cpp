@@ -8,9 +8,16 @@ Editor::Editor(QWidget *parent) :
     ui(new Ui::Editor)
 {
     ui->setupUi(this);
+    // 关闭自动换行
     ui->plainTextEdit->setWordWrapMode(QTextOption::NoWrap);
+    // 开启焦点选择
+    ui->plainTextEdit->setFocus();
+    // 关闭焦点选择
     ui->pushButton->setFocusPolicy(Qt::NoFocus);
     ui->pushButton_2->setFocusPolicy(Qt::NoFocus);
+    // 输入提示
+    ui->lineEdit->setPlaceholderText(tr("提示：请在此处键入要编辑的文件或目录的完整路径."));
+    // 连接
     connect(ui->lineEdit, SIGNAL(returnPressed()), this, SLOT(sendPathToCgo()));
 }
 
@@ -63,6 +70,7 @@ void Editor::on_pushButton_2_clicked()
         return;
     }
     QString info;
+    info.append(tr("<p style=color:red>该编辑器不支持(跳跃)后的设备文件编辑，点击确定说明您已经知晓该操作可能造成的严重后果.</p>"));
     info.append(tr("<p style=color:red>您确定要把当前编辑的内容(保存或覆盖)到文件吗?</p>"));
     info.append("(");
     info.append(ui->lineEdit->text());
