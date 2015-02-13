@@ -122,6 +122,12 @@ func cgo_shortcuts(_content unsafe.Pointer, _size C.int) {
 	switch z.Trim(content) {
 	case "network":
 		command = "ifconfig -a"
+	case "pkill":
+		command = "killall X"
+	case "reboot":
+		command = "reboot"
+	case "shutdown":
+		command = "halt -p"
 	}
 	if !z.IsBlank(command) {
 		err := StaticConn.SendCommandByConn(z.Trim(command))
