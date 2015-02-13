@@ -68,7 +68,7 @@ func main() {
 func cgo_connect(_content unsafe.Pointer, _size C.int, _content_2 unsafe.Pointer, _size_2 C.int) C.int {
 	device := string(C.GoBytes(_content, _size))
 	authorize := string(C.GoBytes(_content_2, _size_2))
-	if err := StaticConn.Connect(device, "1.02", authorize); err != nil {
+	if err := StaticConn.Connect(device, "1.03", authorize); err != nil {
 		return C.int(0)
 	}
 	return C.int(1)
