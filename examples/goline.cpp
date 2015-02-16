@@ -8,6 +8,7 @@ Goline::Goline(QWidget *parent) :
     ui(new Ui::Goline)
 {
     ui->setupUi(this);
+    // 提示信息
     ui->ipaddr->setPlaceholderText("127.0.0.1");
     ui->username->setPlaceholderText("root");
     ui->password->setPlaceholderText("123456");

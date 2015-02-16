@@ -36,7 +36,8 @@ Examples::Examples(QWidget *parent) :
     // 文本编辑器
     edit = new Editor(this);
     connect(this, SIGNAL(send_content_signal(const QString&)), edit, SLOT(on_content_signal(const QString&)));
-    // ...
+    // 云
+    cloud = new Cloud(this);
 }
 
 Examples::~Examples()
@@ -250,8 +251,10 @@ void Examples::on_shutdown_triggered()
     }
 }
 
-void Examples::on_upload_triggered()
+// QString fileName = QFileDialog::getOpenFileName(this, "Open File",QDir::currentPath());
+
+void Examples::on_cloud_triggered()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, "Open File",QDir::currentPath());
-    qDebug() << fileName;
+    cloud->setCgo(cgo);
+    cloud->show();
 }

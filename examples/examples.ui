@@ -81,11 +81,10 @@
    <addaction name="separator"/>
    <addaction name="edit"/>
    <addaction name="separator"/>
-   <addaction name="upload"/>
-   <addaction name="download"/>
+   <addaction name="cloud"/>
    <addaction name="separator"/>
-   <addaction name="save"/>
    <addaction name="clear"/>
+   <addaction name="save"/>
    <addaction name="separator"/>
    <addaction name="help"/>
    <addaction name="separator"/>
@@ -113,8 +112,7 @@
     <addaction name="separator"/>
     <addaction name="save"/>
     <addaction name="separator"/>
-    <addaction name="upload"/>
-    <addaction name="download"/>
+    <addaction name="cloud"/>
     <addaction name="separator"/>
     <addaction name="clear"/>
     <addaction name="separator"/>
@@ -185,24 +183,6 @@
     <string>保存(&amp;S)</string>
    </property>
   </action>
-  <action name="upload">
-   <property name="icon">
-    <iconset resource="examples.qrc">
-     <normaloff>:/up.png</normaloff>:/up.png</iconset>
-   </property>
-   <property name="text">
-    <string>上传(&amp;U)</string>
-   </property>
-  </action>
-  <action name="download">
-   <property name="icon">
-    <iconset resource="examples.qrc">
-     <normaloff>:/down.png</normaloff>:/down.png</iconset>
-   </property>
-   <property name="text">
-    <string>下载(&amp;D)</string>
-   </property>
-  </action>
   <action name="help">
    <property name="icon">
     <iconset resource="examples.qrc">
@@ -266,6 +246,15 @@
    </property>
    <property name="text">
     <string>编辑</string>
+   </property>
+  </action>
+  <action name="cloud">
+   <property name="icon">
+    <iconset resource="examples.qrc">
+     <normaloff>:/cloud.png</normaloff>:/cloud.png</iconset>
+   </property>
+   <property name="text">
+    <string>云端(&amp;F)</string>
    </property>
   </action>
  </widget>

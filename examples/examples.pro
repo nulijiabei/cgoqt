@@ -19,20 +19,23 @@ SOURCES +=\
     goline.cpp \
     cgo.cpp \
     main.cpp \
-    editor.cpp
+    editor.cpp \
+    cloud.cpp
 
 HEADERS  += \
     examples.h \
     connect.h \
     goline.h \
     cgo.h \
-    editor.h
+    editor.h \
+    cloud.h
 
 FORMS    += \
     examples.ui \
     connect.ui \
     goline.ui \
-    editor.ui
+    editor.ui \
+    cloud.ui
 
 RESOURCES += \
     examples.qrc

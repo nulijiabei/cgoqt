@@ -10,6 +10,7 @@
 #include <QCompleter>
 #include "cgo.h"
 #include "editor.h"
+#include "cloud.h"
 
 using namespace std;
 
@@ -29,6 +30,7 @@ public:
     Cgo *cgo;
     QTimer *timer;
     Editor *edit;
+    Cloud *cloud;
 
 public:
     void recvDisplayByCgo(const char *);
@@ -56,16 +58,12 @@ private slots:
     void on_network_triggered();
     void on_member_triggered();
     void on_save_triggered();
-
     void on_edit_triggered();
-
     void on_killall_triggered();
-
     void on_reboot_triggered();
-
     void on_shutdown_triggered();
 
-    void on_upload_triggered();
+    void on_cloud_triggered();
 
 private:
     Ui::Examples *ui;
