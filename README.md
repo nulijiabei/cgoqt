@@ -2,7 +2,7 @@
 
 http://www.nljb.net 具体介绍
 
-一套行之有效的CGO+QT混血GUI结构
+一套行之有效的CGO+QT混写GUI结构
 
 使用QT与GO开发图形程序，无非就是在QT中调用GO函数，在GO中使用QT方法。
 
