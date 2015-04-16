@@ -58,6 +58,7 @@ func start() {
 
 // 主
 func main() {
+	log.Println(z.UnixMsSec(1))
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	log.SetFlags(log.Lshortfile | log.Ldate | log.Ltime | log.Lmicroseconds)
 	StaticConn = NewConn()
