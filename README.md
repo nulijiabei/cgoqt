@@ -17,3 +17,5 @@ D，在GO中，通过//export方式将Go转C，一定要，extern(表示变量�
 
 ...
 
+![Screenshot](http://raw.githubusercontent.com/nulijiabei/cgoqt/master/screenshot.png)
+
