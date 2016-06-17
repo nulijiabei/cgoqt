@@ -4,7 +4,7 @@
 
 相信不远的明天，可以通过gxui库开发纯Go的桌面软件
 
-项目地址：https://github.com/google/gxui
+项目地址：https://github.com/google/gxui(已经废弃)
 
 对于本项目，只是提供了一个使用CGO与QT混血桌面软件的一种方式
 
